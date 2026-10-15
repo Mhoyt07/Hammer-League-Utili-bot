@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "selected_id": "369753f6",
+  "rounds": [
+    {
+      "id": "369753f6",
+      "title": "Tourney test: Fake Pack",
+      "message_id": "1558279355237400679",
+      "pack": null,
+      "data": {
+        "title": "Tourney test: Fake Pack",
+        "results": {
+          "Jaden": "1 - 1",
+          "Varun": "1 - 1",
+          "Matthew": "1 - 1"
+        },
+        "choices": {
+          "Jaden": "Limit 'Magikey Deity'",
+          "Varun": "Open two sets of 24",
+          "Matthew": "Open two sets of 24"
+        }
+      },
+      "created_at": "2026-10-10T00:45:48+00:00",
+      "updated_at": "2026-10-10T00:46:14+00:00"
+    }
+  ]
+}
