@@ -14,3 +14,11 @@ wheels/
 state.json
 .venv/
 __pycache__/
+
+
+.env
+.venv/
+*.bak
+history.json
+history_backup.json
+state.json
