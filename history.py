@@ -5,6 +5,9 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+import firebase_store as fb
+
+
 BASE = Path(__file__).parent
 HISTORY_FILE = BASE / "history.json"
 LEGACY_STATE = BASE / "state.json"
@@ -15,7 +18,7 @@ def _now():
 
 
 def _empty():
-    return {"version": 1, "selected_id": None, "rounds": []}
+    return {"version": 1, "selected_id": None, "rounds": [], "revision" : 0}
 
 
 def load_history():
@@ -35,6 +38,7 @@ def load_history():
         raise ValueError("history.json is missing the 'rounds' list.")
     history.setdefault("version", 1)
     history.setdefault("selected_id", None)
+    history.setdefault("revision", 0)
     return history
 
 
@@ -115,3 +119,44 @@ def update_round(history, round_id, **changes):
 
 def round_label(r):
     return r["title"]
+
+
+
+#Firebase Additions
+class StaleHistoryError(ValueError):
+    pass
+
+def pull():
+    remote = fb.get("history") or _empty()
+    remote.setdefault("version", 1)
+    remote.setdefault("rounds", [])
+    remote.setdefault("revision", 0)
+
+    local_selected = None
+    if HISTORY_FILE.exists():
+        try:
+            local_selected = load_history().get("selected_id")
+        except ValueError:
+            pass
+
+    ids = [r["id"] for r in remote["rounds"]]
+    if local_selected in ids:
+        remote["selected_id"] = local_selected
+    else:
+        remote["selected_id"] = ids[-1] if ids else None
+
+    save_history(remote)
+    return remote
+
+def check_fresh(history):
+    remote_revision = fb.get("history/revision") or 0
+    if remote_revision != history.get("revision", 0):
+        raise StaleHistoryError(
+            "Someone else changed the rounds. Press Reload."
+        )
+
+def push_history(history):
+    history["revision"] = history.get("revision", 0) + 1
+    remote = {k: v for k, v in history.items() if k != "selected_id"}
+    fb.put("history", remote)
+    save_history(history)

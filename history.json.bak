@@ -1,27 +1,47 @@
 {
-  "version": 1,
-  "selected_id": "369753f6",
+  "revision": 12,
   "rounds": [
     {
-      "id": "369753f6",
-      "title": "Tourney test: Fake Pack",
-      "message_id": "1558279355237400679",
-      "pack": null,
+      "created_at": "2026-10-15T02:20:36+00:00",
       "data": {
-        "title": "Tourney test: Fake Pack",
+        "choices": {
+          "Jaden": "Limit 'My Undies'",
+          "Matthew": "Ban 'Jaden's first draw per match'",
+          "Varun": "3 'Tournament 4' Packs"
+        },
         "results": {
           "Jaden": "1 - 1",
-          "Varun": "1 - 1",
-          "Matthew": "1 - 1"
+          "Matthew": "0 - 2",
+          "Varun": "2 - 0"
         },
-        "choices": {
-          "Jaden": "Limit 'Magikey Deity'",
-          "Varun": "Open two sets of 24",
-          "Matthew": "Open two sets of 24"
-        }
+        "title": "Test Round"
       },
-      "created_at": "2026-10-10T00:45:48+00:00",
-      "updated_at": "2026-10-10T00:46:14+00:00"
+      "id": "fc4d007e",
+      "message_id": "1560115140173631549",
+      "title": "Test Round",
+      "updated_at": "2026-10-15T02:23:39+00:00"
+    },
+    {
+      "created_at": "2026-10-15T02:27:10+00:00",
+      "data": {
+        "choices": {
+          "Jaden": "Reroll next set",
+          "Matthew": "3 'Tournament 5' Packs",
+          "Varun": "Open two sets of 24"
+        },
+        "results": {
+          "Jaden": "0 - 2",
+          "Matthew": "2 - 0",
+          "Varun": "1 - 1"
+        },
+        "title": "Test2"
+      },
+      "id": "ef349f87",
+      "message_id": "1560116797045477477",
+      "title": "Test2",
+      "updated_at": "2026-10-15T02:28:17+00:00"
     }
-  ]
+  ],
+  "version": 0,
+  "selected_id": "ef349f87"
 }

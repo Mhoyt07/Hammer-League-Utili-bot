@@ -6,6 +6,10 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
+from history import (
+    check_fresh,
+    push_history
+)
 
 from history import (
     add_round,
@@ -93,7 +97,7 @@ def save_state(state):
             data=data,
         )
 
-    save_history(history)
+    push_history(history)
 
     # Keep the caller's state linked to its saved history entry.
     state["history_id"] = entry["id"]
@@ -137,6 +141,8 @@ def push(state):
     if len(content) > 2000:
         print("Message is too long. Shorten the title or choices.")
         return False
+
+    check_fresh(load_history())
 
     body = {
         "content": content,

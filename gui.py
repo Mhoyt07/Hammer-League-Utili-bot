@@ -7,6 +7,7 @@ from history import (
     round_label,
     save_history,
     select_round,
+    pull
 )
 
 
@@ -193,6 +194,19 @@ def refresh_rounds():
     else:
         round_var.set("")
 
+def reload_all():
+    try:
+        pull()
+        refresh_rounds()
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        status.set(f"Reload failed: {error}")
+        return
+
+    title_var.set("")
+    for value in result_vars.values():
+        value.set("")
+    reset_choice_form()
+    status.set("Reloaded from Firebase.")
 
 def on_round_selected(event=None):
     index = round_box.current()
@@ -276,6 +290,21 @@ def on_option(event=None):
         detail_label_var.set("Detail (not needed)")
         detail_entry.config(state="disabled")
 
+def match_saved(result, existing):
+    for index, (_, template, prompt) in enumerate(OPTIONS[result]):
+        if not prompt:
+            if existing == template:
+                return index, ""
+            continue
+
+        prefix, suffix = template.split("{}")
+        if (
+            existing.startswith(prefix)
+            and existing.endswith(suffix)
+            and len(existing) >= len(prefix) + len(suffix)
+        ):
+            return index, existing[len(prefix):len(existing) - len(suffix)]
+    return None
 
 def on_player(event=None):
     try:
@@ -303,10 +332,19 @@ def on_player(event=None):
     option_box["values"] = [
         option[0] for option in current_options
     ]
-    option_box.current(0)
-    on_option()
-
+    
     existing = state.get("choices", {}).get(player)
+    index, detail = 0, ""
+    if existing:
+        found = match_saved(result, existing)
+        if found:
+            index, detail = found
+
+    option_box.current(index)
+    on_option()
+    if detail:
+        detail_var.set(detail)
+
     if existing:
         status.set(f"{player}'s saved choice: {existing}")
     else:
@@ -386,7 +424,12 @@ ttk.Label(
     wraplength=480,
 ).grid(row=3, column=0, padx=10, pady=(0, 10), sticky="w")
 
+ttk.Button(
+    history_frame, text="Reload", command=reload_all
+).grid(row=0, column=2, padx=(10, 0))
+
 try:
+    pull()
     refresh_rounds()
     if round_var.get():
         status.set(f"Selected {round_var.get()}.")
