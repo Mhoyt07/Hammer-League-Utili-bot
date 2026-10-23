@@ -22,7 +22,7 @@ OPTIONS = {
         ),
     ],
     "1 - 1": [
-        ("Open three extra packs of next set", "Open three extra packs of {}", "Set Name"),
+        ("Open six extra packs of next set", "Open three extra packs of {}", "Set Name"),
         ("Limit a card", "Limit '{}'", "Card name"),
     ],
     "0 - 2": [
